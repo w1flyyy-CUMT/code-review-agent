@@ -5,12 +5,12 @@ from typing import Any
 
 from fastapi import HTTPException, status
 
-from src.review_agent.agent.graph import build_resume_graph, build_review_graph
-from src.review_agent.application.approval_service import ApprovalService
-from src.review_agent.application.review_service import ReviewService
-from src.review_agent.config.settings import get_settings
-from src.review_agent.repository.postgres_review_task_repo import PostgresReviewTaskRepository
-from src.review_agent.repository.review_task_repo import ReviewTaskRepository
+from review_agent.agent.graph import build_resume_graph, build_review_graph
+from review_agent.application.approval_service import ApprovalService
+from review_agent.application.review_service import ReviewService
+from review_agent.config.settings import get_settings
+from review_agent.repository.postgres_review_task_repo import PostgresReviewTaskRepository
+from review_agent.repository.review_task_repo import ReviewTaskRepository
 
 
 @lru_cache

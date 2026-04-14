@@ -38,6 +38,8 @@ def _build_task() -> ReviewTask:
                 deleted_lines=2,
             )
         ],
+        analysis_depth="deep",
+        priority_files=["app/demo.py"],
         findings=[
             Finding(
                 title="示例问题",
@@ -65,6 +67,9 @@ def _build_task() -> ReviewTask:
             )
         ],
         risk_level=RiskLevel.HIGH,
+        confidence=0.87,
+        manual_review_reasons=["存在高风险评审结论，需要人工确认处置策略。"],
+        evidence_count=1,
         approval_required=True,
         approval_status=ApprovalStatus.APPROVED,
         approval_comment="已确认",
@@ -88,6 +93,10 @@ def test_json_report_builder_includes_core_structured_fields() -> None:
     assert report["task_id"] == "rvw_002"
     assert report["status"] == "completed"
     assert report["risk_level"] == "high"
+    assert report["analysis_depth"] == "deep"
+    assert report["confidence"] == 0.87
+    assert report["manual_review_reasons"] == ["存在高风险评审结论，需要人工确认处置策略。"]
+    assert report["evidence_count"] == 1
     assert report["approval_status"] == "approved"
     assert report["trace_id"] == "trace-001"
     assert report["changed_files"][0]["path"] == "app/demo.py"
@@ -101,6 +110,8 @@ def test_markdown_report_builder_renders_approval_section() -> None:
     report = MarkdownReportBuilder().build(task)
 
     assert "# " in report
+    assert "## 评审策略" in report
+    assert "## 人工复核建议" in report
     assert "## Findings" in report
     assert "## 审批记录" in report
     assert "示例问题" in report

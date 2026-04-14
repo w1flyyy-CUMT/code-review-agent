@@ -2,13 +2,33 @@
 
 from __future__ import annotations
 
+import importlib
 from typing import Any
 
-from psycopg import Connection, connect
-from psycopg.types.json import Jsonb
+from review_agent.common.errors import TaskNotFoundError
+from review_agent.domain.models import ReviewTask
 
-from src.review_agent.common.errors import TaskNotFoundError
-from src.review_agent.domain.models import ReviewTask
+try:
+    _psycopg_module = importlib.import_module("psycopg")
+    _psycopg_json_module = importlib.import_module("psycopg.types.json")
+except Exception:  # pragma: no cover - 兼容本地缺少 psycopg 运行时的场景
+    PsycopgConnection = Any
+
+    def connect(dsn: str) -> Any:
+        raise RuntimeError(f"无法连接 PostgreSQL，请确认 psycopg 可用：{dsn}")
+
+    class Jsonb:  # type: ignore[no-redef]
+        """在缺少 psycopg 时提供最小兼容包装。"""
+
+        def __init__(self, payload: Any) -> None:
+            self.obj = payload
+else:
+    PsycopgConnection = _psycopg_module.Connection
+    connect = _psycopg_module.connect
+    Jsonb = _psycopg_json_module.Jsonb
+
+
+Connection = PsycopgConnection
 
 
 class PostgresReviewTaskRepository:

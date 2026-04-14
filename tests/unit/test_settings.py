@@ -6,8 +6,10 @@ from typing import Any
 from review_agent.config.settings import Settings
 
 
-def test_settings_can_load_values_from_dotenv(tmp_path: Path) -> None:
-    env_file = tmp_path / ".env"
+def test_settings_can_load_values_from_dotenv() -> None:
+    env_dir = Path(__file__).resolve().parents[2] / ".tmp_test_settings"
+    env_dir.mkdir(exist_ok=True)
+    env_file = env_dir / ".env"
     env_file.write_text(
         "\n".join(
             [

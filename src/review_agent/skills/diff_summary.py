@@ -1,9 +1,9 @@
 """变更摘要 skill。"""
 
-from src.review_agent.domain.enums import FindingSeverity
-from src.review_agent.domain.models import Evidence, Finding
-from src.review_agent.llm.bailian_client import BailianChatClient
-from src.review_agent.skills.base import SkillContext, SkillResult
+from review_agent.domain.enums import FindingSeverity
+from review_agent.domain.models import Evidence, Finding
+from review_agent.llm.bailian_client import BailianChatClient
+from review_agent.skills.base import SkillContext, SkillResult
 
 
 class DiffSummarySkill:

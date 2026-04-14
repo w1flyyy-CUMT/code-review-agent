@@ -14,6 +14,11 @@ class JsonReportBuilder:
             "task_id": task.task_id,
             "status": task.status.value,
             "risk_level": task.risk_level.value,
+            "analysis_depth": task.analysis_depth,
+            "priority_files": task.priority_files,
+            "confidence": task.confidence,
+            "manual_review_reasons": task.manual_review_reasons,
+            "evidence_count": task.evidence_count,
             "approval_required": task.approval_required,
             "approval_status": task.approval_status.value,
             "changed_files": [

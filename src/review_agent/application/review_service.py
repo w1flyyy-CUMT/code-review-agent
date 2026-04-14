@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from src.review_agent.agent.state import AgentState
-from src.review_agent.common.clock import utc_now
-from src.review_agent.common.ids import new_task_id, new_trace_id
-from src.review_agent.domain.models import ReviewTask, TraceEvent
-from src.review_agent.repository.review_task_repo import ReviewTaskRepository
+from review_agent.agent.state import AgentState
+from review_agent.common.clock import utc_now
+from review_agent.common.ids import new_task_id, new_trace_id
+from review_agent.domain.models import ReviewTask, TraceEvent
+from review_agent.repository.review_task_repo import ReviewTaskRepository
 
 
 class ReviewService:
@@ -54,10 +54,16 @@ class ReviewService:
             waiting_reason=state.waiting_reason,
             changed_files=state.changed_files,
             selected_skills=state.selected_skills,
+            analysis_depth=state.analysis_depth,
+            priority_files=state.priority_files,
+            requires_context_review=state.requires_context_review,
             skill_results=state.skill_results,
             findings=state.findings,
             tool_runs=state.tool_runs,
             risk_level=state.risk_level,
+            confidence=state.confidence,
+            manual_review_reasons=state.manual_review_reasons,
+            evidence_count=state.evidence_count,
             approval_required=state.approval_required,
             approval_status=state.approval_status,
             approval_comment=state.approval_comment,
@@ -84,10 +90,16 @@ class ReviewService:
             waiting_reason=task.waiting_reason,
             changed_files=task.changed_files,
             selected_skills=task.selected_skills,
+            analysis_depth=task.analysis_depth,
+            priority_files=task.priority_files,
+            requires_context_review=task.requires_context_review,
             skill_results=task.skill_results,
             findings=task.findings,
             tool_runs=task.tool_runs,
             risk_level=task.risk_level,
+            confidence=task.confidence,
+            manual_review_reasons=task.manual_review_reasons,
+            evidence_count=task.evidence_count,
             approval_required=task.approval_required,
             approval_status=task.approval_status,
             approval_comment=task.approval_comment,
@@ -108,10 +120,16 @@ class ReviewService:
         task.waiting_reason = state.waiting_reason
         task.changed_files = state.changed_files
         task.selected_skills = state.selected_skills
+        task.analysis_depth = state.analysis_depth
+        task.priority_files = state.priority_files
+        task.requires_context_review = state.requires_context_review
         task.skill_results = state.skill_results
         task.findings = state.findings
         task.tool_runs = state.tool_runs
         task.risk_level = state.risk_level
+        task.confidence = state.confidence
+        task.manual_review_reasons = state.manual_review_reasons
+        task.evidence_count = state.evidence_count
         task.approval_required = state.approval_required
         task.approval_status = state.approval_status
         task.approval_comment = state.approval_comment

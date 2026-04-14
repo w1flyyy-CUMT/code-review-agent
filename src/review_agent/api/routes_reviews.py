@@ -4,10 +4,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from src.review_agent.api.deps import get_review_service
-from src.review_agent.api.schemas import CreateReviewRequest, ReviewResponse
-from src.review_agent.application.review_service import ReviewService
-from src.review_agent.common.errors import TaskNotFoundError
+from review_agent.api.deps import get_review_service
+from review_agent.api.schemas import CreateReviewRequest, ReviewResponse
+from review_agent.application.review_service import ReviewService
+from review_agent.common.errors import TaskNotFoundError
 
 router = APIRouter(prefix="/reviews", tags=["reviews"])
 

@@ -14,10 +14,32 @@ class MarkdownReportBuilder:
             f"- 任务编号：`{task.task_id}`",
             f"- 当前状态：`{task.status.value}`",
             f"- 风险等级：`{task.risk_level.value}`",
+            f"- 分析深度：`{task.analysis_depth or 'standard'}`",
+            f"- 整体置信度：`{task.confidence if task.confidence is not None else 'n/a'}`",
+            f"- 证据数量：`{task.evidence_count}`",
             f"- 审批状态：`{task.approval_status.value}`",
             "",
-            "## 变更文件",
+            "## 评审策略",
         ]
+
+        if not task.priority_files:
+            lines.append("- 本次未识别出需要额外优先关注的文件")
+        else:
+            for file_path in task.priority_files:
+                lines.append(f"- 优先关注：`{file_path}`")
+
+        if task.manual_review_reasons:
+            lines.append("")
+            lines.append("## 人工复核建议")
+            for reason in task.manual_review_reasons:
+                lines.append(f"- {reason}")
+
+        lines.extend(
+            [
+                "",
+            "## 变更文件",
+            ]
+        )
 
         if not task.changed_files:
             lines.append("- 未解析到变更文件")

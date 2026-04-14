@@ -61,22 +61,19 @@
 
 当前主链路：
 
-1. `parse_diff`
-2. `classify_files`
-3. `route_skills`
-4. `run_skills`
-5. `aggregate_findings`
-6. `score_risk`
-7. `approval_gate`
-8. `resume_after_approval`
-9. `generate_report`
+1. `parse_input`
+2. `plan_and_route`
+3. `execute_review`
+4. `reflect_and_decide`
+5. `generate_report`
 
-当前阶段二补充：
+当前阶段主流程说明：
 
-- `parse_diff` 已支持提取 `ChangedFile.hunks`
-- Python 文件会额外提取 `function / class / import` 级别的 `symbols`
-- `classify_files` 会结合路径、symbols 和 hunk header 推断 `file_type / risk_tags`
-- `route_skills` 不再只依赖文件路径，也会消费 `risk_tags / symbols`
+- `parse_input` 已合并原有 `parse_diff + classify_files`，会提取 `ChangedFile.hunks`、Python `symbols`，并推断 `file_type / risk_tags`
+- `plan_and_route` 会在 skill 路由基础上补充 `priority_files / analysis_depth / requires_context_review`
+- `execute_review` 合并原有 `run_skills + aggregate_findings`，并行执行 skills 后统一聚合 `tool_runs / findings`
+- `reflect_and_decide` 会综合严重级别、显式审批标记、证据数量与整体置信度，决定是否进入人工复核
+- 审批挂起不再占用单独节点，而是由 `reflect_and_decide` 直接把任务置为 `waiting_approval`
 
 当前模块：
 
@@ -164,12 +161,12 @@
 
 1. `POST /reviews` 接收仓库路径与 diff 内容
 2. `ReviewService` 创建任务编号并启动 LangGraph
-3. Agent 节点解析 diff、分类文件、路由并执行 skills
-4. 聚合 findings、计算风险等级并判断是否需要审批
-5. 若无需审批，直接生成报告并落库
-6. 若需要审批，任务进入 `waiting_approval`
+3. Agent 节点解析 diff、规划策略、路由并执行 skills
+4. `reflect_and_decide` 统一完成风险评估、置信度估算与人工复核判断
+5. 若无需审批，直接进入 `generate_report`
+6. 若需要审批，任务在 `reflect_and_decide` 后进入 `waiting_approval`
 7. `POST /reviews/{task_id}/approvals` 提交审批结果
-8. `ApprovalService` 恢复后续节点执行并更新最终报告
+8. `ApprovalService` 通过 `resume_after_approval -> generate_report` 恢复执行并更新最终报告
 
 ## 4. 当前默认实现约定
 

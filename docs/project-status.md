@@ -98,25 +98,21 @@
 
 当前主链路已经打通：
 
-1. `parse_diff`
-2. `classify_files`
-3. `route_skills`
-4. `run_skills`
-5. `aggregate_findings`
-6. `score_risk`
-7. `approval_gate`
-8. `resume_after_approval`
-9. `generate_report`
+1. `parse_input`
+2. `plan_and_route`
+3. `execute_review`
+4. `reflect_and_decide`
+5. `generate_report`
 
 当前能力包括：
 
 - 解析 diff
 - 提取 hunk 与 Python symbols
 - 文件分类与风险标签补充
-- skill 路由
+- 轻量评审策略规划与 skill 路由
 - 并行执行 skills
 - findings 聚合与去重
-- 风险评估
+- 风险评估、置信度估算与人工复核判断
 - 审批挂起与审批后恢复
 - 报告生成
 

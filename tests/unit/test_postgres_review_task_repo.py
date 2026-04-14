@@ -6,7 +6,6 @@ from datetime import UTC, datetime
 from typing import Any
 
 import pytest
-from psycopg.types.json import Jsonb
 
 from review_agent.common.errors import TaskNotFoundError
 from review_agent.domain.enums import ApprovalStatus, RiskLevel, TaskStatus
@@ -90,7 +89,7 @@ def test_postgres_repository_save_persists_json_payload(monkeypatch: pytest.Monk
     assert save_params is not None
     assert save_params[0] == "rvw_pg_001"
     assert save_params[1] == "completed"
-    assert isinstance(save_params[6], Jsonb)
+    assert type(save_params[6]).__name__ == "Jsonb"
 
 
 def test_postgres_repository_get_restores_review_task(monkeypatch: pytest.MonkeyPatch) -> None:

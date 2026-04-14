@@ -78,9 +78,9 @@ def test_submit_approval_can_resume_review() -> None:
         assert created["status"] == "waiting_approval"
         assert created["approval_required"] is True
         assert created["approval_status"] == "pending"
-        assert created["current_node"] == "approval_gate"
+        assert created["current_node"] == "reflect_and_decide"
         assert created["next_action"] == "submit_approval"
-        assert created["waiting_reason"] == "存在高风险问题，需要人工审批"
+        assert created["waiting_reason"] == "存在高风险评审结论，需要人工确认处置策略。"
         assert created["trace_id"].startswith("trc_")
 
         approve_response = client.post(

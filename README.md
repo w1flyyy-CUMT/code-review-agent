@@ -98,20 +98,23 @@ uv run review-agent
 
 ```mermaid
 flowchart TD
-    A["START"] --> B["parse_diff"]
-    B --> C["classify_files"]
-    C --> D["route_skills"]
-    D --> E["run_skills"]
-    E --> F["aggregate_findings"]
-    F --> G["score_risk"]
-    G --> H{"need_approval?"}
-    H -->|yes| I["approval_gate"]
-    H -->|no| J["generate_report"]
-    I --> K["等待人工审批"]
-    K --> L["resume_after_approval"]
-    L --> J
-    J --> M["END"]
+    A["START"] --> B["parse_input"]
+    B --> C["plan_and_route"]
+    C --> D["execute_review"]
+    D --> E["reflect_and_decide"]
+    E -->|无需审批| F["generate_report"]
+    E -->|等待审批| G["END"]
+    H["resume_after_approval"] --> F
+    F --> I["END"]
 ```
+
+当前首轮评审主链路收敛为 5 个核心节点：
+
+1. `parse_input`：解析 diff，并补全 `changed_files / file_type / risk_tags`
+2. `plan_and_route`：规划轻量评审策略，产出 `selected_skills / priority_files / analysis_depth`
+3. `execute_review`：并行执行 skills，汇总 `tool_runs` 并聚合去重 findings
+4. `reflect_and_decide`：做二次判断，产出 `risk_level / confidence / manual_review_reasons`，并决定是否挂起等待审批
+5. `generate_report`：基于最新状态生成 JSON / Markdown 报告
 
 ## 请求示例
 

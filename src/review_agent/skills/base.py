@@ -4,7 +4,7 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel, Field
 
-from src.review_agent.domain.models import ChangedFile, Finding, ToolRunResult
+from review_agent.domain.models import ChangedFile, Finding, ToolRunResult
 
 
 class SkillContext(BaseModel):

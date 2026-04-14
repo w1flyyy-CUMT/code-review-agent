@@ -4,7 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from src.review_agent.domain.enums import ApprovalDecision
+from review_agent.domain.enums import ApprovalDecision
 
 
 class CreateReviewRequest(BaseModel):
