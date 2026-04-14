@@ -1,0 +1,50 @@
+[project]
+name = "review-agent"
+version = "0.1.0"
+description = "面向 Git Diff 的智能代码评审 Agent"
+readme = "README.md"
+authors = [
+    { name = "moonbow123", email = "2929643634@qq.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.135.3",
+    "langgraph>=1.1.6",
+    "openai>=2.31.0",
+    "psycopg[binary]>=3.3.3",
+    "pydantic-settings>=2.13.1",
+    "structlog>=25.5.0",
+    "uvicorn>=0.44.0",
+]
+
+[project.scripts]
+review-agent = "review_agent.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10.12,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.20.1",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.15.10",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "ASYNC"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_unused_configs = true
+packages = ["review_agent"]
